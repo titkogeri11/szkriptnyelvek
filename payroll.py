@@ -146,7 +146,34 @@ def main():
                                 found = True
                     if not found:
                         print("Nincs találat.")
-
+                case 2:
+                    s_bdate = input("Keresett szül. dátum: ").strip().replace(".", "-")
+                    found = False
+                    with open("payrolls.csv", "r") as f:
+                        for line in f:
+                            if not line.strip():
+                                continue
+                            row = line.strip().split(";")
+                            if row and row[1] == s_bdate:
+                                print(line.strip())
+                                found = True
+                            if not found:
+                                print("Nincs találat.")
+                case 3:
+                    s_position = input("Keresett pozíció: ").strip().replace(".", "-")
+                    found = False
+                    with open("payrolls.csv", "r") as f:
+                        for line in f:
+                            if not line.strip():
+                                continue
+                            row = line.strip().split(";")
+                            if row and row[2] == s_position:
+                                print(line.strip())
+                                found = True
+                            if not found:
+                                print("Nincs találat.")
+                case 4:
+                    pass
 
 if __name__ == "__main__":
     main()
