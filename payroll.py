@@ -173,7 +173,33 @@ def main():
                             if not found:
                                 print("Nincs találat.")
                 case 4:
-                    pass
+                    s_hwage = input("Keresett órabér: ").strip()
+                    found = False
+                    with open("payrolls.csv", "r") as f:
+                        for line in f:
+                            if not line.strip():
+                                continue
+                            row = line.strip().split(";")
+                            if row and row[3] == s_hwage:
+                                print(line.strip())
+                                found = True
+                            if not found:
+                                print("Nincs találat.")
+                case 5:
+                    s_hours = input("Keresett óraszám: ").strip()
+                    found = False
+                    with open("payrolls.csv", "r") as f:
+                        for line in f:
+                            if not line.strip():
+                                continue
+                            row = line.strip().split(";")
+                            if row and row[4] == s_hours:
+                                print(line.strip())
+                                found = True
+                            if not found:
+                                print("Nincs találat.")
+                case 6:
+                        pass
 
 if __name__ == "__main__":
     main()
