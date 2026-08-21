@@ -1,3 +1,13 @@
+import os
+
+def clear_screen():
+    os.system("clear" if os.name != "nt" else "cls")
+
+def prompt(message):
+    value = input(message)
+    clear_screen()
+    return value
+
 def taxreturn(gross, young, children, travel):
 
     tax = 0
@@ -24,14 +34,14 @@ def wage(tax, gross):
     return gross * (1 - tax)
 
 def worker_stats():
-    wname = input("Name: ").strip().replace(" ", "_")
-    wbdate = input("Date of birth: ")
-    wposition = input("Position: ")
-    wyoung = input("Younger than 25? (y/n): ").strip().lower()
-    wchildren = int(input("Number of children: "))
-    whwage = int(input("Hourly wage: "))
-    whours = int(input("Hours: "))
-    wdate = input("Date: ")
+    wname = prompt("Name: ").strip().replace(" ", "_")
+    wbdate = prompt("Date of birth: ")
+    wposition = prompt("Position: ")
+    wyoung = prompt("Younger than 25? (y/n): ").strip().lower()
+    wchildren = int(prompt("Number of children: "))
+    whwage = int(prompt("Hourly wage: "))
+    whours = int(prompt("Hours: "))
+    wdate = prompt("Date: ")
 
     wgross = whwage * whours
     return wname, wbdate, wposition, wyoung, wchildren, whwage, whours, wdate, wgross
@@ -41,54 +51,87 @@ def d_mode_input():
         print("2. Keresés az adatbázisban")
         print("3. Mező törlése")
         print("4. Mező szerkesztése")
-        action = int(input("Choice: "))
-
+        action = int(prompt("Choice: "))
         return action
 
+def almost_matching(query, field_index):
+    """
+    Egyszerű, könnyen érthető keresés egy megadott mezőre.
+    - `query`: a felhasználói keresőszöveg
+    - `field_index`: melyik mezőt nézzük (0..6)
+    Visszatérési érték: a találatok listája (sorok stringként).
+    """
+    talalat = []
+    q = query.strip().lower()
+    try:
+        with open("payrolls.csv", "r") as f:
+            for line in f:
+                if not line.strip():
+                    continue
+                row = line.strip().split(";")
+                # Ha a mező nincs meg a sorban, kihagyjuk
+                if field_index >= len(row):
+                    continue
+                field = row[field_index].strip().lower()
+                # Kis egyszerűsítés: ha a mező _ karaktert tartalmaz, cseréljük szóközre
+                field = field.replace("_", " ")
+                # exact vagy részleges egyezés
+                if q == field or q in field or field in q:
+                    talalat.append(line.strip())
+    except FileNotFoundError:
+        return talalat
+
+    return talalat
+
 def main():
-    mode = input("(t)est / (w)rite / (d)ocumentation: ")
+    mode = prompt("(t)est / (w)rite / (d)ocumentation: ")
     if mode in ('t', 'T'):
         while True:
             try:
-                hours = int(input("Hours: "))
+                hours = int(prompt("Hours: "))
                 if hours < 0:
                     raise ValueError
                 break
             except ValueError:
                 print("Érvénytelen érték, add meg újra.")
+                clear_screen()
 
         while True:
             try:
-                hwage = int(input("HUF/ hour: "))
+                hwage = int(prompt("HUF/ hour: "))
                 if hwage < 0:
                     raise ValueError
                 break
             except ValueError:
                 print("Érvénytelen érték, add meg újra.")
+                clear_screen()
 
         while True:
-            young = input("Younger than 25? (y/n): ").strip().lower()
+            young = prompt("Younger than 25? (y/n): ").strip().lower()
             if young in ("y", "n"):
                 break
             print("Érvénytelen válasz, y vagy n kell.")
+            clear_screen()
 
         while True:
             try:
-                children = int(input("Number of children: "))
+                children = int(prompt("Number of children: "))
                 if children < 0:
                     raise ValueError
                 break
             except ValueError:
                 print("Érvénytelen érték, add meg újra.")
+                clear_screen()
 
         while True:
             try:
-                travel = int(input("Distance traveled: "))
+                travel = int(prompt("Distance traveled: "))
                 if travel < 0:
                     raise ValueError
                 break
             except ValueError:
                 print("Érvénytelen érték, add meg újra.")
+                clear_screen()
 
         gross = hours * hwage
 
@@ -100,12 +143,13 @@ def main():
 
         while True:
             try:
-                travel = int(input("Distance traveled: "))
+                travel = int(prompt("Distance traveled: "))
                 if travel < 0:
                     raise ValueError
                 break
             except ValueError:
                 print("Érvénytelen érték, add meg újra.")
+                clear_screen()
 
         tax, gross = taxreturn(wgross, wyoung, wchildren, travel)
         net = wage(tax, gross)
@@ -129,77 +173,66 @@ def main():
             print("5. Ledolgozott órák száma alapján")
             print("6. Fizetési tárgyhó alapján")
             print("7. Nettő fizetés alapján")
-            choice = int(input(": "))
+            choice = int(prompt(": "))
             #zsófi
             #<3
             match choice:
                 case 1:
-                    s_name = input("Keresett név: ").strip().replace(" ", "_")
-                    found = False
-                    with open("payrolls.csv", "r") as f:
-                        for line in f:
-                            if not line.strip():
-                                continue
-                            row = line.strip().split(";")
-                            if row and row[0] == s_name:
-                                print(line.strip())
-                                found = True
-                    if not found:
+                    s_name = prompt("Keresett név: ").strip()
+                    results = almost_matching(s_name, 0)
+                    if results:
+                        for r in results:
+                            print(r)
+                    else:
                         print("Nincs találat.")
                 case 2:
-                    s_bdate = input("Keresett szül. dátum: ").strip().replace(".", "-")
-                    found = False
-                    with open("payrolls.csv", "r") as f:
-                        for line in f:
-                            if not line.strip():
-                                continue
-                            row = line.strip().split(";")
-                            if row and row[1] == s_bdate:
-                                print(line.strip())
-                                found = True
-                            if not found:
-                                print("Nincs találat.")
+                    s_bdate = prompt("Keresett szül. dátum: ").strip().replace(".", "-")
+                    results = almost_matching(s_bdate, 1)
+                    if results:
+                        for r in results:
+                            print(r)
+                    else:
+                        print("Nincs találat.")
                 case 3:
-                    s_position = input("Keresett pozíció: ").strip().replace(".", "-")
-                    found = False
-                    with open("payrolls.csv", "r") as f:
-                        for line in f:
-                            if not line.strip():
-                                continue
-                            row = line.strip().split(";")
-                            if row and row[2] == s_position:
-                                print(line.strip())
-                                found = True
-                            if not found:
-                                print("Nincs találat.")
+                    s_position = prompt("Keresett pozíció: ").strip()
+                    results = almost_matching(s_position, 2)
+                    if results:
+                        for r in results:
+                            print(r)
+                    else:
+                        print("Nincs találat.")
                 case 4:
-                    s_hwage = input("Keresett órabér: ").strip()
-                    found = False
-                    with open("payrolls.csv", "r") as f:
-                        for line in f:
-                            if not line.strip():
-                                continue
-                            row = line.strip().split(";")
-                            if row and row[3] == s_hwage:
-                                print(line.strip())
-                                found = True
-                            if not found:
-                                print("Nincs találat.")
+                    s_hwage = prompt("Keresett órabér: ").strip()
+                    results = almost_matching(s_hwage, 3)
+                    if results:
+                        for r in results:
+                            print(r)
+                    else:
+                        print("Nincs találat.")
                 case 5:
-                    s_hours = input("Keresett óraszám: ").strip()
-                    found = False
-                    with open("payrolls.csv", "r") as f:
-                        for line in f:
-                            if not line.strip():
-                                continue
-                            row = line.strip().split(";")
-                            if row and row[4] == s_hours:
-                                print(line.strip())
-                                found = True
-                            if not found:
-                                print("Nincs találat.")
+                    s_hours = prompt("Keresett óraszám: ").strip()
+                    results = almost_matching(s_hours, 4)
+                    if results:
+                        for r in results:
+                            print(r)
+                    else:
+                        print("Nincs találat.")
                 case 6:
-                        pass
+                    s_pmonth = prompt("Keresett fizetési tárgyhó: ").strip()
+                    results = almost_matching(s_pmonth, 5)
+                    if results:
+                        for r in results:
+                            print(r)
+                    else:
+                        print("Nincs találat.")
+                case 7:
+                    s_net = prompt("Keresett nettó fizetés: ").strip()
+                    results = almost_matching(s_net, 6)
+                    if results:
+                        for r in results:
+                            print(r)
+                    else:
+                        print("Nincs találat.")
 
 if __name__ == "__main__":
     main()
