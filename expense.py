@@ -6,15 +6,16 @@ def prompt(message):
     clear_screen()
     return value
 def sumexp():
-    with open("expenses.csv", "r") as f:
+    with open("allexp.csv", "r") as f:
         return f.readline()
 
 def menu():
 
-    #print("1. Összes kiadás")
+    print(f"Összes kiadás: {sumexp()}")
     print("2. Új kiadás")
+    print("Tételek listázása")
     print("3. Kiadás törlése")
-    #print("4. ")
+
 
 def main():
     menu()
