@@ -33,7 +33,7 @@ def exp_menu():
     date = input("Dátum: ").replace(".", "-")
     category = input("Választott kategória: ")
     amount = int(input("Mennyiség (HUF): "))
-    clear_screen()
+    #clear_screen()
 
     f = open("expenses.csv", "w")
     writed_category = ""
@@ -42,6 +42,10 @@ def exp_menu():
         case 1:
             writed_category = "Bevásárlás"
             f.write("")
+        case 2:
+            writed_category = "Utazás"
+        case 3:
+            
 
 
 
