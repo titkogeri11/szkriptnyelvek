@@ -24,31 +24,41 @@ def prompt(message):
     return value
 def sumexp():
     with open("allexp.csv", "r") as f:
-        return f.readline()
+        return f.readline().strip()
 def exp_menu():
     print("1. Bevásárlás")
     print("2. Utazás")
     print("3. Szórakozás")
     print("4. Transzfer")
     date = input("Dátum: ").replace(".", "-")
-    category = input("Választott kategória: ")
+    place = input("Szolgáltató: ")
     amount = int(input("Mennyiség (HUF): "))
+    try:
+            category = int(input("Választott kategória: "))
+    except ValueError:
+            print("Érvénytelen kategória. Számot adjon meg (1-4).")
+            return
     #clear_screen()
 
     f = open("expenses.csv", "w")
     writed_category = ""
 
+    writed_category = ""
+
     match category:
-        case 1:
-            writed_category = "Bevásárlás"
-            f.write("")
-        case 2:
-            writed_category = "Utazás"
-        case 3:
-            
-
-
-
+            case 1:
+                writed_category = "Bevásárlás"
+            case 2:
+                writed_category = "Utazás"
+            case 3:
+                writed_category = "Szórakozás"
+            case 4:
+                writed_category = "Transzfer"
+            case _:
+                print("Ismeretlen kategória. 1-4 között adja meg.")
+                return
+    with open("expenses.csv", "a", encoding="utf-8") as f:
+        f.write(f"{amount:.2f};{place};{writed_category};{date}\n")
 
 def menu():
 
@@ -63,8 +73,12 @@ def main():
     mode = prompt("Mód: ")
 
     match mode:
-        case 1:
-            exp_menu():
+        case "1":
+            exp_menu()
+        case "2":
+            pass
+        case "3":
+            pass
 
 
 
