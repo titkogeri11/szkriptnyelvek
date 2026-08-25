@@ -59,13 +59,16 @@ def exp_menu():
                 return
     with open("expenses.csv", "a", encoding="utf-8") as f:
         f.write(f"{amount:.2f};{place};{writed_category};{date}\n")
+def list_expenses():
+    with open("expenses.csv", "r") as f:
+        f.read()
 
 def menu():
 
     print(f"Összes kiadás: {sumexp()} HUF")
     print("1. Új kiadás")
-    print("2. Tételek listázása")
-    print("3. Kiadás törlése")
+    print("2. Összes kiadás listázása")
+    print("3. Tételek szerinti listázás")
 
 
 def main():
