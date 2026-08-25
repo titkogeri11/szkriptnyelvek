@@ -23,8 +23,14 @@ def prompt(message):
     clear_screen()
     return value
 def sumexp():
-    with open("allexp.csv", "r") as f:
-        return f.readline().strip()
+    sum = 0
+    with open("expenses.csv", "r") as f:
+            for line in f:
+                if not line.strip():
+                    continue
+                row = line.strip().split(";")
+                sum += float(row[0].strip())
+    return sum
 def exp_menu():
     print("1. Bevásárlás")
     print("2. Utazás")
@@ -61,16 +67,12 @@ def exp_menu():
         f.write(f"{amount:.2f};{place};{writed_category};{date}\n")
 def list_expenses():
     with open("expenses.csv", "r") as f:
-        f.read()
-
+        print(f.read())
 def menu():
-
     print(f"Összes kiadás: {sumexp()} HUF")
     print("1. Új kiadás")
     print("2. Összes kiadás listázása")
     print("3. Tételek szerinti listázás")
-
-
 def main():
     menu()
     mode = prompt("Mód: ")
@@ -79,7 +81,7 @@ def main():
         case "1":
             exp_menu()
         case "2":
-            pass
+            list_expenses()
         case "3":
             pass
 
