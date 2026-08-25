@@ -1,4 +1,5 @@
 import os
+from datetime import datetime
 def read_non_negative_int(message):
     while True:
         try:
@@ -22,6 +23,52 @@ def prompt(message):
     value = input(message)
     clear_screen()
     return value
+def read_date(message):
+    while True:
+        value = prompt(message).strip()
+        try:
+            parsed = datetime.strptime(value, "%Y-%m-%d")
+            if parsed.strftime("%Y-%m-%d") != value:
+                raise ValueError
+            return parsed.strftime("%Y-%m-%d")
+        except ValueError:
+            print("Érvénytelen dátum. Kérjük, az ÉÉÉÉ-HH-NN formátumot használja!")
+            #clear_screen()
+def read_place(message):
+    while True:
+        value = prompt(message).strip()
+        if value:
+            return value
+        print("A szolgáltató neve nem lehet üres!")
+        clear_screen()
+def read_amount(message):
+    while True:
+        value = prompt(message).strip()
+        try:
+            amount = float(value)
+        except ValueError:
+            print("Érvénytelen összeg. Számot kell megadni!")
+            clear_screen()
+            continue
+        if amount <= 0:
+            print("Az összegnek 0-nál nagyobbnak kell lennie!")
+            clear_screen()
+            continue
+        return amount
+def read_category(message):
+    while True:
+        value = prompt(message).strip()
+        try:
+            category = int(value)
+        except ValueError:
+            print("Érvénytelen kategória. 1-4 közötti számot adjon meg!")
+            clear_screen()
+            continue
+        if category not in (1, 2, 3, 4):
+            print("A kategória csak 1, 2, 3 vagy 4 lehet!")
+            clear_screen()
+            continue
+        return category
 def sumexp():
     sum = 0
     with open("expenses.csv", "r") as f:
@@ -36,33 +83,25 @@ def exp_menu():
     print("2. Utazás")
     print("3. Szórakozás")
     print("4. Transzfer")
-    date = input("Dátum: ").replace(".", "-")
-    place = input("Szolgáltató: ")
-    amount = int(input("Mennyiség (HUF): "))
-    try:
-            category = int(input("Választott kategória: "))
-    except ValueError:
-            print("Érvénytelen kategória. Számot adjon meg (1-4).")
-            return
-    #clear_screen()
 
-    f = open("expenses.csv", "w")
-    writed_category = ""
-
-    writed_category = ""
+    category = read_category("Választott kategória (1-4): ")
+    date = read_date("Dátum (ÉÉÉÉ-HH-NN): ")
+    place = read_place("Szolgáltató: ")
+    amount = read_amount("Mennyiség (HUF): ")
 
     match category:
-            case 1:
-                writed_category = "Bevásárlás"
-            case 2:
-                writed_category = "Utazás"
-            case 3:
-                writed_category = "Szórakozás"
-            case 4:
-                writed_category = "Transzfer"
-            case _:
-                print("Ismeretlen kategória. 1-4 között adja meg.")
-                return
+        case 1:
+            writed_category = "Bevásárlás"
+        case 2:
+            writed_category = "Utazás"
+        case 3:
+            writed_category = "Szórakozás"
+        case 4:
+            writed_category = "Transzfer"
+        case _:
+            print("Ismeretlen kategória. 1-4 között adja meg.")
+            return
+
     with open("expenses.csv", "a", encoding="utf-8") as f:
         f.write(f"{amount:.2f};{place};{writed_category};{date}\n")
 def list_expenses():
@@ -84,9 +123,6 @@ def main():
             list_expenses()
         case "3":
             pass
-
-
-
 
 
 
