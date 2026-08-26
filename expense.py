@@ -112,6 +112,38 @@ def menu():
     print("1. Új kiadás")
     print("2. Összes kiadás listázása")
     print("3. Tételek szerinti listázás")
+def list_categories():
+    bevasarlas = []
+    utazas = []
+    #niga8)
+    szorakozas = []
+    transzfer = []
+    with open("expenses.csv", "r") as f:
+            for line in f:
+                if not line.strip():
+                    continue
+                row = line.strip().split(";")
+                if row[2] == "Bevásárlás":
+                    bevasarlas.append(line)
+                elif row[2] == "Utazás":
+                    utazas.append(line)
+                elif row[2] == "Szórakozás":
+                    szorakozas.append(line)
+                elif row[2] == "Transzfer":
+                    transzfer.append(line)
+            for line in bevasarlas:
+                print("BEVÁSÁRLÁS:\n")
+                print(line)
+            for line in utazas:
+                print("UTAZÁS:\n")
+                print(line)
+            for line in szorakozas:
+                print("SZÓRAKOZÁS:\n")
+                print(line)
+            for line in transzfer:
+                print("TRANSZFER:\n")
+                print(line)                                
+
 def main():
     menu()
     mode = prompt("Mód: ")
