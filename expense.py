@@ -122,6 +122,7 @@ def list_categories():
     szor_sum = 0.0
     transzfer = []
     tr_sum = 0.0
+
     with open("expenses.csv", "r") as f:
             for line in f:
                 if not line.strip():
@@ -139,18 +140,35 @@ def list_categories():
                 elif row[2] == "Transzfer":
                     transzfer.append(line)
                     tr_sum += float(row[0].strip())
-            print(f"BEVÁSÁRLÁS:{bev_sum}\n")                    
-            for line in bevasarlas:
-                print("\t" + line)
-            print(f"UTAZÁS: {ut_sum}\n")
-            for line in utazas:
-                print("\t" + line)
-            print(f"SZÓRAKOZÁS:{szor_sum} \n")
-            for line in szorakozas:                
-                print("\t" + line)
-            print(f"TRANSZFER: {tr_sum}\n")
-            for line in transzfer:
-                print("\t" + line)
+
+            if bev_sum != 0.0:
+                print(f"BEVÁSÁRLÁS:{bev_sum}\n")                    
+                for line in bevasarlas:
+                    print("\t" + line)
+            else:
+                pass
+
+            if ut_sum != 0.0:
+                print(f"UTAZÁS: {ut_sum}\n")
+                for line in utazas:
+                    print("\t" + line)
+            else:
+                pass
+
+            if szor_sum != 0.0:
+                print(f"SZÓRAKOZÁS:{szor_sum} \n")
+                for line in szorakozas:                
+                    print("\t" + line)
+            else:
+                pass
+
+            if tr_sum != 0.0:
+                print(f"TRANSZFER: {tr_sum}\n")
+                for line in transzfer:
+                    print("\t" + line)
+            else:
+                pass
+
 def main():
     menu()
     mode = prompt("Mód: ")
