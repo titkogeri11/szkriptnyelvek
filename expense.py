@@ -114,10 +114,14 @@ def menu():
     print("3. Tételek szerinti listázás")
 def list_categories():
     bevasarlas = []
+    bev_sum = 0.0
     utazas = []
+    ut_sum = 0.0
     #niga8)
     szorakozas = []
+    szor_sum = 0.0
     transzfer = []
+    tr_sum = 0.0
     with open("expenses.csv", "r") as f:
             for line in f:
                 if not line.strip():
@@ -125,25 +129,28 @@ def list_categories():
                 row = line.strip().split(";")
                 if row[2] == "Bevásárlás":
                     bevasarlas.append(line)
+                    bev_sum += float(row[0].strip())
                 elif row[2] == "Utazás":
                     utazas.append(line)
+                    ut_sum += float(row[0].strip())
                 elif row[2] == "Szórakozás":
                     szorakozas.append(line)
+                    szor_sum += float(row[0].strip())
                 elif row[2] == "Transzfer":
                     transzfer.append(line)
+                    tr_sum += float(row[0].strip())
+            print(f"BEVÁSÁRLÁS:{bev_sum}\n")                    
             for line in bevasarlas:
-                print("BEVÁSÁRLÁS:\n")
-                print(line)
+                print("\t" + line)
+            print(f"UTAZÁS: {ut_sum}\n")
             for line in utazas:
-                print("UTAZÁS:\n")
-                print(line)
-            for line in szorakozas:
-                print("SZÓRAKOZÁS:\n")
-                print(line)
+                print("\t" + line)
+            print(f"SZÓRAKOZÁS:{szor_sum} \n")
+            for line in szorakozas:                
+                print("\t" + line)
+            print(f"TRANSZFER: {tr_sum}\n")
             for line in transzfer:
-                print("TRANSZFER:\n")
-                print(line)                                
-
+                print("\t" + line)
 def main():
     menu()
     mode = prompt("Mód: ")
@@ -154,7 +161,7 @@ def main():
         case "2":
             list_expenses()
         case "3":
-            pass
+            list_categories()
 
 
 
