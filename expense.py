@@ -112,6 +112,51 @@ def menu():
     print("1. Új kiadás")
     print("2. Összes kiadás listázása")
     print("3. Tételek szerinti listázás")
+    print("4. Keresés")
+def src_menu():
+    print("1. Szolgáltató szerint")
+    print("2. Összeg szerint")
+    print("3. Dátum szerint")
+    print("4. Kategória szerint")
+    mode = input("Mód: ")
+    clear_screen()
+    match mode:
+        case "1":
+            sdata = input("Szolgáltató: ")
+            with open("expenses.csv", "r") as f:
+                for line in f:
+                    if not line.strip():
+                        continue
+                    row = line.strip().split(";")
+                    if row[1] == sdata:
+                        print(line)
+        case "2":
+            sdata = input("Összeg: ")
+            with open("expenses.csv", "r") as f:
+                for line in f:
+                    if not line.strip():
+                        continue
+                    row = line.strip().split(";")
+                    if row[0] == sdata:
+                        print(line)
+        case "3":
+            sdata = input("Dátum: ")
+            with open("expenses.csv", "r") as f:
+                for line in f:
+                    if not line.strip():
+                        continue
+                    row = line.strip().split(";")
+                    if row[3] == sdata:
+                        print(line)
+        case "4":
+            sdata = input("Kategória: ")
+            with open("expenses.csv", "r") as f:
+                for line in f:
+                    if not line.strip():
+                        continue
+                    row = line.strip().split(";")
+                    if row[2] == sdata:
+                        print(line)    
 def list_categories():
     bevasarlas = []
     bev_sum = 0.0
@@ -180,6 +225,8 @@ def main():
             list_expenses()
         case "3":
             list_categories()
+        case "4":
+            src_menu()
 
 
 
