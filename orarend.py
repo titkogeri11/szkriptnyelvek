@@ -19,54 +19,44 @@ def new_class():
         f.write(f"{name};{type};{day};{hr};{room};{prof}\n")
     clear_screen()
 def list_classes():
-    print("Hétfő")
-    with open("classes.csv", "r") as f:
-        for line in f:
-            if not line.strip():
-                continue
-            row = line.strip().split(";")
-            if row[2].strip().lower() == "hétfő":
-                print("\t" + line.strip())
-    print()
-    print("Kedd")
-    with open("classes.csv", "r") as f:
-        for line in f:
-            if not line.strip():
-                continue
-            row = line.strip().split(";")
-            if row[2].strip().lower() == "kedd":
-                print("\t" + line.strip())
-    print()
-    print("Szerda")
-    with open("classes.csv", "r") as f:
-        for line in f:
-            if not line.strip():
-                continue
-            row = line.strip().split(";")
-            if row[2].strip().lower() == "szerda":
-                print("\t" + line.strip())
-    print()
-    print("Csütörtök")
-    with open("classes.csv", "r") as f:
-        for line in f:
-            if not line.strip():
-                continue
-            row = line.strip().split(";")
-            if row[2].strip().lower() == "csütörtök":
-                print("\t" + line.strip())
-    print()
-    print("Péntek")
-    with open("classes.csv", "r") as f:
-        for line in f:
-            if not line.strip():
-                continue
-            row = line.strip().split(";")
-            if row[2].strip().lower() == "péntek":
-                print("\t" + line.strip())
-    print()
+    days = [
+        ("Hétfő", "hétfő"),
+        ("Kedd", "kedd"),
+        ("Szerda", "szerda"),
+        ("Csütörtök", "csütörtök"),
+        ("Péntek", "péntek"),
+    ]
+
+    for day_display, day_value in days:
+        counter = 0
+        day_lines = []
+        with open("classes.csv", "r") as f:
+            for line in f:
+                if not line.strip():
+                    continue
+                row = line.strip().split(";")
+                # védelem rövidebb sorok ellen
+                if len(row) < 3:
+                    continue
+                if row[2].strip().lower() == day_value:
+                    counter += 1
+                    day_lines.append(line.strip())
+
+        # fejléc: nap + összegzés
+        if counter == 0:
+            print(f"{day_display}: ---")
+        else:
+            print(f"{day_display}: {counter} óra")
+            for l in day_lines:
+                print("\t" + l)
+        print()
+def missed_classes():
+    
+
 def main():
     print("1. Összes óra listázása")
     print("2. Új óra hozzáadása")
+    print("3. Hiányzások")
 
     mode = int(input("Mód: "))
     clear_screen()
